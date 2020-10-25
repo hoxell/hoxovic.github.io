@@ -20,6 +20,17 @@
 include: ["_pages"]
 search: true
 
+defaults:
+  - scope:
+      path: ""
+      type: posts
+    values:
+      layout: single
+      toc: true
+      author_profile: true
+      read_time: true
+      toc: true
+
 title: Freddy vs. Tech
 # email: your-email@example.com
 description: >- # this means to ignore newlines until "baseurl:"
@@ -35,13 +46,13 @@ minimal_mistakes_skin: dark
 # plugins:
   # - jekyll-feed
 
+
 author:
   name: "Freddy"
   avatar: /assets/images/avatar.jpg
   bio: >
     I'm an engineer who's particularly interested in the interface between engineering and programming.<br><br>
     This is a place to put my programming related thoughts and elegant tidbits that I encounter as I go.
-    
 
 
 # Exclude from processing.
