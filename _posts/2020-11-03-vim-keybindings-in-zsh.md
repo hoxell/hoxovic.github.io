@@ -1,6 +1,7 @@
 ---
 title: "Vim keybindings in `zsh`" 
 layout: single
+toc: false
 publisher: true
 ---
 
