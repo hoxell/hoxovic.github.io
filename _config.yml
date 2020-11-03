@@ -38,7 +38,7 @@ description: >- # this means to ignore newlines until "baseurl:"
 # baseurl: "" # the subpath of your site, e.g. /blog
 # url: "" # the base hostname & protocol for your site, e.g. http://example.com
 # twitter_username: jekyllrb
-# github_username:  jekyll
+github_username:  hoxovic
 
 # Build settings
 remote_theme: "mmistakes/minimal-mistakes"
@@ -55,6 +55,10 @@ author:
   bio: >
     I'm an engineer who's particularly interested in the interface between engineering and programming.<br><br>
     This is a place to put my programming related thoughts and elegant tidbits that I encounter as I go.
+  location: "Sweden"
+  links:
+    - label: "github"
+      url: "https://github.com/hoxovic"
 
 
 # Exclude from processing.
