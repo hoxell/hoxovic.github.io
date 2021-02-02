@@ -4,11 +4,11 @@ layout: single
 published: true
 ---
 
-What is so hard about creating a singleton in Python? That's the question of the day after having done some quick browsing in search of inspiration for the most pythonic way to implement the singleton pattern. The problem? A surprising amount of articles and tutorials written by professional software developers got it wrong (and some even proposed implementations that lead to even more instances being created than would've been without their "singleton" pattern). We can't have that now, can we?
+What is so hard about creating a singleton in Python? That's the question of the day after having done some quick browsing in search of inspiration for the most pythonic way to implement the singleton pattern. The problem? A surprising amount of articles and tutorials written by professional software developers got it quite wrong (and some even proposed implementations that lead to even more instances being created than would've been without their "singleton" pattern). We can't have that, now can we?
 
 
 # How objects are created in Python 3
-The main issue seems to be the authors don't have firm grasp of how instance creation works in Python. Specifically, they failed to realize it's not `__init__` that's creating the actual instance. Just look at its simplest signature, `def __init__(self)`. In its simplest form, it takes an instance of the class, so something must have created the instance before `__init__` is called. Looking at the [documentation](https://docs.python.org/3/reference/datamodel.html#object.__new__), it becomes clear that it's the `__new__` method that's called to create a new instance of a class.
+The main issue seems to be that it's not entirely obvious how instance creation works in Python. Specifically, some of the authors failed to realize it's not `__init__` that's creating the actual instance. Just look at its simplest signature, `def __init__(self)`. In its simplest form, it takes an instance of the class, so something must have created the instance before `__init__` is called. Looking at the [documentation](https://docs.python.org/3/reference/datamodel.html#object.__new__), it becomes clear that it's the `__new__` method that's called to create a new instance of a class.
 
 The documentation goes on to explain that:
 
@@ -56,7 +56,7 @@ Do note that the initialization code is also put in the `__new__` method so that
 There are a few variations of the explicit version. For instance, some implementations that you'll come across will require you to create the `Singleton` object first and then call `get_instance()` on it. Other implementations will just make it a `@classmethod`.
 
 ### The wrong way
-An actual example of lazy instantiation taken from the first page returned for by Google for a quite generic search looked something like this:
+An actual example of lazy instantiation taken from the first page returned by Google for a quite generic search looked something like this:
 
 ```python
 class Singleton:
@@ -79,7 +79,7 @@ s1 = Singleton()
 
 So, what's wrong with this? After all, it seems quite similar to the example of the implicit singleton above.
 
-Well, not really. Let's see for ourselves by adding a print-outs in its `__new__` method without changing the object creation functionality.
+Well, not really. Let's see for ourselves by adding a print-out in its `__new__` method without changing the object creation functionality.
 
 `singleton.py`
 ```python
@@ -131,7 +131,7 @@ Used this way, it actually works as intended. The class attribute `__instance` g
 
 
 ### The correct way
-So, what's a better way?
+So, what would be the better way?
 
 `singleton.py`
 ```python
@@ -149,7 +149,7 @@ class Singleton:
         return cls.__instance
 ```
 
-This design makes it impossible to instantiate the class directly. Do note how the `Singleton()` in `get_instance(cls)` has been changed to `super().__new__(cls)`, or we'd have hit the runtime error in `__init__()`. Also note the use of `cls.__init__` instead of `super().__init__`. The difference is insignificant in this case, but should you have overridden the default `__new__` in the class, you'd want to call the correct `__new__`.
+This design makes it impossible to instantiate the class directly. Do note how the `Singleton()` in `get_instance(cls)` has been changed to `cls.__new__(cls)`, or we'd have hit the runtime error in `__init__()`. Also note the use of `cls.__new__` instead of `super().__new__`. The difference is insignificant in this case, but should you have overridden the default `__new__` in the class, you'd want to call the correct `__new__`.
 
 Actually, it's not completely impossible to create an instance of `Singleton`. If you really wanted to create an instance, you could do:
 
@@ -158,7 +158,7 @@ Actually, it's not completely impossible to create an instance of `Singleton`. I
 >>> instance = Singleton.__new__(Singleton)
 ```
 
-I'm sure you don't have to bother with this case, but let's fix it just for the fun of it.
+In fact, that's exactly what's being done in the classmethod. I'm sure you don't have to bother with this case in most situations, but let's fix it just for the fun of it.
 
 
 ### An even better way
@@ -217,7 +217,7 @@ Unless we define a class with a metaclass other than `type`, the class object (n
 <class 'type'>
 ```
 
-What really happens when you use the round-bracket syntax to instantiate a class is that the Python interpreter interprets it as calling the class, which in this case is `Singleton`. At this point, another magic mehtod comes into play - the `__call__` method. When _calling_ a class of type `type`, the call resolves to `type.__call__()`. It's this function that calls `__new__` and, if appropriate, `__init__`.
+What really happens when you use the round-bracket syntax to instantiate a class is that the Python interpreter interprets it as calling the class, which in this case is `Singleton`. At this point, another magic method comes into play - the `__call__` method. When _calling_ a class of type `type`, the call resolves to `type.__call__()`. It's this function that calls `__new__` and, if appropriate, `__init__`.
 
 This is the actual source of `type_call` of the CPython language:
 
@@ -309,7 +309,7 @@ if (!PyType_IsSubtype(Py_TYPE(obj), type))
 
 Recalling the beginning of this post, this is the implementation of the part of the specification that says that if the object created in `tp_new` is an instance or subclass of the class, the instance will be initialized by calling the corresponding `__init__` method on it.
 
-Now, conceptually, what we want to do is modify the sequence in `__call__` so that the object created the first time is reused for all subsequent calls. Luckily, though, we can't mess with attributes of `type` like that. The way around it is to create a new metaclass and override the default `__call__` method.
+Now, conceptually, what one would want to do is modify the sequence in `__call__` so that the object created the first time is reused for all subsequent calls. Luckily, though, it's not possible to mess with attributes of `type` like that. The way around it is to create a new metaclass and override the default `__call__` method.
 
 ```python
 class SingletonMetaclass(type):
@@ -321,12 +321,7 @@ class SingletonMetaclass(type):
 ```
 
 
-
-If you want to get some more details about this, check out this excellent [post](https://eli.thegreenplace.net/2012/04/16/python-object-creation-sequence) or [this](https://realpython.com/python-metaclasses/#defining-a-class-dynamically) higher-level explanation of metaclasses and class instantiation sequence.
-
-
-
 # Conclusion
-If there's one thing you should remember from all this, it's that in Python 3 objects are created in the `__new__` method. Thus, if you want to avoid creating unnecessary objects or need to manage which object is given/returned to a consumer of your class, this is typically where you should start looking.
+This has only scratched the surface of the object instantiation in Python(3), but if you want to get some more details about this, check out this detailed [post](https://eli.thegreenplace.net/2012/04/16/python-object-creation-sequence) or [this](https://realpython.com/python-metaclasses/#defining-a-class-dynamically) higher-level explanation of metaclasses and class instantiation sequence.
 
-
+That said, one doesn't have to dig too deep into the magic Python methods to be able to implement this simple pattern and if there's one thing you should remember from all this, it's that in Python 3, objects are created in the `__new__` method. Thus, if you want to avoid creating unnecessary objects, need to customize object creation or need to manage which object is given/returned to a consumer of your class, `__new__` and `__call__` is where you should start looking.
