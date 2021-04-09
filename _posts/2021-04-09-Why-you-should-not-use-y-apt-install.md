@@ -16,10 +16,10 @@ What happened was that `apt` found that the installation would lead to incompati
 # The solution
 Now, the keyboard wasn't entirely unusable, it just couldn't be used to interact with the xserver. Typically the procedure to fix this is:
 
-1) Boot into recovery mode
-2) Launch a shell as root
-3) Enable networking
-4) `$ apt update && apt install xserver-xorg-input-all`
+1) Boot into recovery mode  
+2) Launch a shell as root  
+3) Enable networking  
+4) `$ apt update && apt install xserver-xorg-input-all`  
 
 Easy enough, right?
 
