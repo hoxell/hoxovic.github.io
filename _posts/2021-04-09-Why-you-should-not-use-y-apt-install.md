@@ -23,7 +23,7 @@ Now, the keyboard wasn't entirely unusable, it just couldn't be used to interact
 
 Easy enough, right?
 
-Working for a big company, though, there were a few complicating factors that didn't make it quite this simple:
+Working for a big company, though, there were a few complicating factors that didn't make it quite this simple:  
 1) Custom apt sources (behind a corporate proxy, of course)  
 2) All default apt sources removed  
 3) Mandatory VPN (GUI only) to reach any company resources  
