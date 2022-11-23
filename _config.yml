@@ -8,7 +8,7 @@
 # For technical reasons, this file is *NOT* reloaded automatically when you use
 # 'bundle exec jekyll serve'. If you change this file, please restart the server process.
 #
-# If you need help with YAML syntax, here are some quick references for you: 
+# If you need help with YAML syntax, here are some quick references for you:
 # https://learn-the-web.algonquindesign.ca/topics/markdown-yaml-cheat-sheet/#yaml
 # https://learnxinyminutes.com/docs/yaml/
 #
@@ -31,9 +31,9 @@ defaults:
       read_time: true
       toc: true
 
-title: Freddy vs. Tech
+title: Freddy
 # email: your-email@example.com
-description: >- # this means to ignore newlines until "baseurl:"
+description: >-
   Programming and engineering related posts focusing on elegant tricks and things that can simplify your life as a developer.
 # baseurl: "" # the subpath of your site, e.g. /blog
 # url: "" # the base hostname & protocol for your site, e.g. http://example.com
@@ -53,8 +53,7 @@ author:
   name: "Freddy"
   avatar: /assets/images/profile_github.jpg
   bio: >
-    I'm an engineer who's particularly interested in the interface between engineering and programming.<br><br>
-    This is a place to put my programming related thoughts and elegant tidbits that I encounter as I go.
+    My code brings all the boys to the yard. Welcome to my yard.
   location: "Sweden"
   links:
     - label: "github"
